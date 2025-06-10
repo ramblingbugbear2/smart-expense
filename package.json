@@ -1,0 +1,31 @@
+{
+  "name": "smart-expense",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node api/app.js",
+    "dev": "nodemon api/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ramblingbugbear2/smart-expense.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ramblingbugbear2/smart-expense/issues"
+  },
+  "homepage": "https://github.com/ramblingbugbear2/smart-expense#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.28.0",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.5.3"
+  }
+}
