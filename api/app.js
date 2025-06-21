@@ -1,9 +1,13 @@
 require('dotenv').config();
+console.log('[MONGO URI]', process.env.MONGODB_URI);
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/auth.routes');
 const protect = require('./middleware/protect');
+
+const groupRoutes = require('./routes/group.routes');
+const expenseRoutes = require('./routes/expense.routes');
 
 const connectDB = require('./utlis/mongodb');
 require('./utlis/redis')
@@ -15,6 +19,9 @@ app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
 app.use('/api/auth', authRoutes);
+
+app.use('/api/groups', groupRoutes);
+app.use('/api/expenses', expenseRoutes);
 
 
 app.get('/hello' ,(req,res) => {

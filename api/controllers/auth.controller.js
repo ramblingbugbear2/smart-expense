@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user.model.js');
 
 const genTokens = (userId) => {
-    const access = jwt.sign({ userId}, process.env.JWT_ACCESS_SECRET,{expiresIn: '15m'});
+    const access = jwt.sign({ userId}, process.env.JWT_ACCESS_SECRET,{expiresIn: '59m'});
     const refresh = jwt.sign({ userId}, process.env.JWT_REFRESH_SECRET,{expiresIn: '7d'});
     return {access,refresh};
 };
