@@ -63,19 +63,6 @@
 
 ---
 
-## 🏁 Getting Started
-
-### Prerequisites
-
-- **Node.js v20.x** and **npm** installed on your local machine.
-- Git to clone the repository.
-- **MongoDB Atlas** account for cloud database hosting.
-- **Redis Cloud** account for caching and real-time data.
-
----
-
-### Installation
-
 1. **Clone the repository**:
 
    ```bash
