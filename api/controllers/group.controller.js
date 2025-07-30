@@ -28,3 +28,40 @@ exports.list = async(req,res) => {
     const groups = await Group.find({members:req.userId});
     res.json(groups);
 };
+
+exports.list = async (req, res) => {
+   const groups = await Group.find({ members: req.userId });
+   res.json(groups);
+ };
+
+exports.list = async (req, res) => {
+   const groups = await Group.find({ members: req.userId });
+   res.json(groups);
+ };
+
+exports.list = async (req, res) => {
+   const groups = await Group.find({ members: req.userId });
+   res.json(groups);
+ };
+
+exports.list = async (req, res) => {
+   const groups = await Group.find({ members: req.userId });
+   res.json(groups);
+ };
+
+exports.list = async (req, res) => {
+   const groups = await Group.find({ members: req.userId });
+   res.json(groups);
+ };
+
+exports.getOne = async (req, res, next) => {
+  try {
+    // bring back each member’s name & email for the client
+    const g = await Group.findById(req.params.id)
+                         .populate('members', 'name email');
+    if (!g) return res.status(404).json({ msg: 'Group not found' });
+    res.json(g);
+  } catch (err) {
+    next(err);
+  }
+};

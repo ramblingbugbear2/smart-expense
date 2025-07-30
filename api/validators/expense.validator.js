@@ -14,3 +14,8 @@ exports.createExpense = z.object({
             share: z.number().positive()
         })).min(1)
 });
+
+exports.updateExpense = z.object({
+  description: z.string().min(1).optional(),
+  amount:      z.number().positive().optional(),
+});

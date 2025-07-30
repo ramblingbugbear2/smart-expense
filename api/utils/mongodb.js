@@ -3,19 +3,26 @@ const mongoose = require('mongoose');
 
 /**
  * Connect to MongoDB using Mongoose.
- * The URI comes from process.env.MONGODB_URI
+ * In test mode uses MONGODB_URI_TEST, otherwise MONGODB_URI.
  */
 const connectDB = async () => {
+  const uri = process.env.NODE_ENV === 'test'
+    ? process.env.MONGODB_URI_TEST
+    : process.env.MONGODB_URI;
+  const opts = { useNewUrlParser: true, useUnifiedTopology: true };
+
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
-      // these options avoid deprecation warnings
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log('✅  MongoDB connected');
+    await mongoose.connect(uri, opts);
+    if (process.env.NODE_ENV !== 'test') {
+      console.log('✅  MongoDB connected');
+    }
   } catch (err) {
     console.error('❌  MongoDB connection error:', err.message);
-    process.exit(1);            // crash fast if DB is unreachable
+    if (process.env.NODE_ENV === 'test') {
+      throw err;            // let Jest catch it
+    } else {
+      process.exit(1);      // in prod, crash
+    }
   }
 };
 
