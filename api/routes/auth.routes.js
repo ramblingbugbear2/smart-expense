@@ -14,5 +14,31 @@ router.get('/users', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
+// CREATE  ─────────────────────────────────────────────────────────────
+router.post('/users', async (req, res) => {
+  const { name } = req.body;
+  if (!name?.trim()) return res.status(400).json({ msg: 'Name required' });
+  const user = await User.create({ name: name.trim() });
+  res.status(201).json(user);
+});
+
+// UPDATE (rename) ─────────────────────────────────────────────────────
+router.put('/users/:id', async (req, res) => {
+  const { name } = req.body;
+  const { id } = req.params;
+  if (!name?.trim()) return res.status(400).json({ msg: 'Name required' });
+  const user = await User.findByIdAndUpdate(id, { name: name.trim() }, { new: true });
+  if (!user) return res.status(404).json({ msg: 'User not found' });
+  res.json(user);
+});
+
+// DELETE ──────────────────────────────────────────────────────────────
+router.delete('/users/:id', async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findByIdAndDelete(id);
+  if (!user) return res.status(404).json({ msg: 'User not found' });
+  res.sendStatus(204);
+});
+
 
 module.exports = router;
