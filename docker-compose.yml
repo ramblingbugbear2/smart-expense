@@ -1,0 +1,60 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: smart_expense_mongo
+    environment:
+      # matches your .env URI credentials (admin/secret, authSource=admin)
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: secret
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand({ ping: 1 }).ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+
+  redis:
+    image: redis:7-alpine
+    container_name: smart_expense_redis
+    command: ["redis-server","--appendonly","yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: smart_expense_api
+    # load your secrets from .env, but override the hostnames so containers talk to each other
+    env_file: [.env]
+    environment:
+      PORT: "5000"
+      # IMPORTANT: inside Docker, use service names (mongo/redis), not localhost
+      MONGODB_URI: mongodb://admin:secret@mongo:27017/smart_expense?authSource=admin
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_URL: redis://redis:6379
+      # JWT_ACCESS_SECRET and JWT_REFRESH_SECRET will come from your .env
+    depends_on:
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "5000:5000"
+
+volumes:
+  mongo-data:
+  redis-data:
