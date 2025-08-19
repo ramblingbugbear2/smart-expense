@@ -42,6 +42,6 @@ exports.refresh= (req,res) => {
         const access = jwt.sign({userId: payload.userId}, process.env.JWT_ACCESS_SECRET, {expiresIn:'15m'});
         res.json({access});
     } catch  {
-        res.status(401).json({msh: 'Refresh token invalid'});
+        res.status(401).json({msg: 'Refresh token invalid'});
     }
 };

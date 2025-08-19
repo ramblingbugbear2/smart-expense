@@ -3,7 +3,7 @@ const Group = require('../models/group.model');
 const balanceSvc = require('../services/balance.service');
 const socket = require('../utils/socket');   
 
-exports.create = async (req,res) => {
+exports.create = async (req,res,next) => {
     try{
         const {name, members} = req.body;
         const group = await Group.create({
@@ -24,35 +24,15 @@ exports.listBalances = async (req,res) => {
     res.json(data);
 }
 
-exports.list = async(req,res) => {
-    const groups = await Group.find({members:req.userId});
+exports.list = async (req, res, next) => {
+  try {
+    const groups = await Group.find({ members: req.userId });
     res.json(groups);
+  } catch (err) {
+    next(err);
+  }
 };
 
-exports.list = async (req, res) => {
-   const groups = await Group.find({ members: req.userId });
-   res.json(groups);
- };
-
-exports.list = async (req, res) => {
-   const groups = await Group.find({ members: req.userId });
-   res.json(groups);
- };
-
-exports.list = async (req, res) => {
-   const groups = await Group.find({ members: req.userId });
-   res.json(groups);
- };
-
-exports.list = async (req, res) => {
-   const groups = await Group.find({ members: req.userId });
-   res.json(groups);
- };
-
-exports.list = async (req, res) => {
-   const groups = await Group.find({ members: req.userId });
-   res.json(groups);
- };
 
 exports.getOne = async (req, res, next) => {
   try {
