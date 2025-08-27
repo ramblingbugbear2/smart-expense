@@ -29,7 +29,15 @@ app.use('/api/settlements', settlementRoutes);
 app.use('/api/members', require('./routes/member.route'));   // before error handler
 
 
-app.get('/hello',           (req, res) => res.json({ greeting: 'SmartExpense is alive!', time: new Date().toISOString() }));
+// app.get('/hello',           (req, res) => res.json({ greeting: 'SmartExpense is alive!', time: new Date().toISOString() }));
+
+//health check unified as railway will also use this for health check
+app.get('/api/health', (req, res) => res.json({ 
+  status: 'OK', 
+  timestamp: new Date().toISOString(),
+  service: 'Smart Expense API',
+  database: 'connected' // Railway can use this for health checks
+}));
 app.get('/api/secure-hello',protect , (req, res) => res.json({ msg: `Hello user ${req.userId}!` }));
 
 /* ---------- Runtime-only bootstrap (skip in tests) ---------- */
