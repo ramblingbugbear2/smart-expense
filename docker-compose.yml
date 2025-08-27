@@ -32,29 +32,7 @@ services:
       timeout: 5s
       retries: 15
 
-  api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: smart_expense_api
-    # load your secrets from .env, but override the hostnames so containers talk to each other
-    env_file: [.env]
-    environment:
-      PORT: "5000"
-      # IMPORTANT: inside Docker, use service names (mongo/redis), not localhost
-      MONGODB_URI: mongodb://admin:secret@mongo:27017/smart_expense?authSource=admin
-      REDIS_HOST: redis
-      REDIS_PORT: "6379"
-      REDIS_URL: redis://redis:6379
-      # JWT_ACCESS_SECRET and JWT_REFRESH_SECRET will come from your .env
-    depends_on:
-      mongo:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    ports:
-      - "5000:5000"
-
+  
 volumes:
   mongo-data:
   redis-data:
