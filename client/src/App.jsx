@@ -6,7 +6,7 @@ import HomePage     from './pages/HomePage.jsx';
 import LoginPage    from './pages/LoginPage.jsx';
 import SignupPage   from './pages/SignupPage.jsx';
 
-import Navbar       from './components/Navbar.jsx';
+import Navbar       from './components/NavBar.jsx';
 import GroupsPage   from './pages/GroupsPage.jsx';
 import GroupDetail  from './pages/GroupDetail.jsx';
 
