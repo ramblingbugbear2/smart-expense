@@ -8,6 +8,7 @@ const protect      = require('./middleware/protect');
 const groupRoutes  = require('./routes/group.routes');
 const expenseRoutes= require('./routes/expense.routes');
 const settlementRoutes = require('./routes/settlement.routes');
+const path         = require('path');
 
 const app = express();
 app.use(express.json());
@@ -26,6 +27,20 @@ app.use('/api/auth',        authRoutes);
 app.use('/api/groups',      groupRoutes);
 app.use('/api/expenses',    expenseRoutes);
 app.use('/api/settlements', settlementRoutes);
+
+// Serve React static files
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
+// Catch-all handler for React Router (client-side routing)
+app.get('/*wildcard', (req, res) => {
+  // Only serve React for non-API requests
+  if (!req.path.startsWith('/api')) {
+    res.sendFile(path.resolve(__dirname, '../client/dist/index.html'));
+  } else {
+    res.status(404).json({ error: 'API route not found' });
+  }
+});
+
 app.use('/api/members', require('./routes/member.route'));   // before error handler
 
 
