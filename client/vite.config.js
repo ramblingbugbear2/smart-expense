@@ -1,9 +1,8 @@
-// client/vite.config.js
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import path from 'node:path'
-import alias from '@rollup/plugin-alias'   // ← add
+import alias from '@rollup/plugin-alias'
 
 export default defineConfig({
   plugins: [
@@ -20,17 +19,16 @@ export default defineConfig({
         start_url: '/',
         display: 'standalone',
         background_color: '#ffffff',
-        theme_color: '#16a34a',          // Tailwind green-600
+        theme_color: '#16a34a',
       },
     }), 
     alias({ entries:[{ find:'@', replacement:path.resolve(__dirname,'src') }] })
   ],
 
-  /* 👇 this part tells the dev-server to forward any /api/* to port 5000 */
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'http://127.0.0.1:5000', // ✅ FIXED: Use IPv4 instead of localhost
         changeOrigin: true,
       },
     },

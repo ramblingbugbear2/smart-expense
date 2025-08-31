@@ -2,7 +2,10 @@ import axios from 'axios';
 import {getAccess, setAccess,refreshToken} from '../hooks/useAuth.jsx';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  // ✅ FIXED: Using relative URL in development, absolute in production
+  baseURL: import.meta.env.PROD 
+    ? (import.meta.env.VITE_API_URL || '/api')  // Production: use env var or relative
+    : '/api',  // Development: relative URL (Vite proxy handles it)
   withCredentials: true,
 });
 
