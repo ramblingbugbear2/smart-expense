@@ -9,19 +9,20 @@ const connectDB = async () => {
   const uri = process.env.NODE_ENV === 'test'
     ? process.env.MONGODB_URI_TEST
     : process.env.MONGODB_URI;
-  const opts = { useNewUrlParser: true, useUnifiedTopology: true };
 
   try {
-    await mongoose.connect(uri, opts);
+    // ✅ Connect without deprecated options
+    await mongoose.connect(uri);
+    
     if (process.env.NODE_ENV !== 'test') {
       console.log('✅  MongoDB connected');
     }
   } catch (err) {
     console.error('❌  MongoDB connection error:', err.message);
     if (process.env.NODE_ENV === 'test') {
-      throw err;            // let Jest catch it
+      throw err;
     } else {
-      process.exit(1);      // in prod, crash
+      process.exit(1);
     }
   }
 };

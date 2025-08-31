@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+
 const express      = require('express');
 const cors         = require('cors');
 const cookieParser = require('cookie-parser');
@@ -16,7 +17,10 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: [
+    'http://localhost:5173', // Local development
+    'https://smart-expense-production.up.railway.app' // Railway domain
+  ],
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Content-Type,Authorization',
@@ -70,5 +74,9 @@ if (process.env.NODE_ENV !== 'test') {
   const { init: initSocket } = require('./utils/socket');
   initSocket(server);
 }
+console.log('🔍 DEBUG INFO:');
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('PORT:', process.env.PORT);
+console.log('Static path exists:', require('fs').existsSync(path.join(__dirname, '../client/dist')));
 
 module.exports = app;   // tests import just the Express app
