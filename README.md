@@ -1,70 +1,114 @@
-# SmartExpense - UPI-first Expense Split & Budget Tracker
+Smart Expense - Group Expense Tracker
+A real-time expense splitting app built for Indian groups. Split bills, track balances, and settle up with minimal transactions.
 
-[![Build Status](https://github.com/ramblingbugbear2/smart-expense/actions/workflows/ci.yml/badge.svg)](https://github.com/ramblingbugbear2/smart-expense/actions)
-[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](LICENSE)
+🎯 What it does
+Ever been on a trip with friends and spent hours calculating who owes what? This app solves exactly that problem. Add expenses, split them among group members, and get the optimal settlement plan that minimizes the number of transactions needed.
 
-**SmartExpense** is a UPI-first expense-splitting and budget-tracking PWA for Indian users. The app allows groups to seamlessly manage expenses, track spending, and settle bills instantly using UPI deep-link generation. Built with modern technologies, SmartExpense provides a user-friendly experience with real-time updates and secure payment processing.
+Live Demo: smart-expense-production.up.railway.app
 
----
+✨ Key Features
+   ->Smart Settlements: Uses algorithms to minimize transactions (if 5 people owe money, you might only need 2-3 transactions instead of 10+)
+   ->Real-time Updates: When someone adds an expense, everyone sees it instantly
+   ->UPI Integration: Generate QR codes for settlements (perfect for Indian users)
+   ->Group Management: Create groups, add members, manage expenses
+   ->Balance Tracking: Always know who owes what at a glance
 
-## 📋 Table of Contents
+🛠 Tech Stack
+   1.Backend
+      -Node.js with Express
+      -MongoDB for data storage
+      -Redis for caching (makes balance calculations super fast)
+      -Socket.io for real-time features
+      -JWT authentication
+   2.Frontend
+      -React 18+ with modern hooks
+      -Tailwind CSS for styling
+      -Socket.io client for real-time sync
+      -Axios for API calls
+   3.Testing & Deployment
+      -Jest for testing
+      -Railway for backend & frontend deployment
 
-1. [Features](#-features)
-2. [Demo](#-demo)
-3. [Tech Stack](#-tech-stack)
-4. [Getting Started](#-getting-started)
-   - [Prerequisites](#prerequisites)
-   - [Installation](#installation)
-   - [Environment Variables](#environment-variables)
-   - [Running the App](#running-the-app)
-5. [Folder Structure](#-folder-structure)
-6. [API Reference](#-api-reference)
-7. [Contributing](#-contributing)
-8. [License](#-license)
+🚀 Getting Started
+   ->Prerequisites
+      -Node.js (v18+)
+      -MongoDB
+      -Redis (optional for local dev)
 
----
-
-## 🚀 Features
-
-- **User Authentication**: Secure signup, login, and JWT (JSON Web Tokens) access & refresh tokens.
-- **Group Management**: Create, view, and update expense groups. Add or remove members.
-- **Expense Tracking**: Add and split expenses among group members. Support for equal, percentage, or share-based splits.
-- **UPI Payments**: Generate UPI deep-links and QR codes for instant settlement of group balances.
-- **Dashboard**: Interactive dashboard displaying group expenses, balances, and UPI settlement status.
-- **Real-Time Notifications**: WebSocket notifications powered by Redis pub/sub for real-time updates.
-- **CI/CD**: Automated testing and deployment pipelines using GitHub Actions for both frontend and backend.
-
----
-
-## 🎬 Demo
-
-![SmartExpense Demo](docs/demo.png)
-
-> _Screenshot of the dashboard with group expense summary and UPI QR code._
-
----
-
-## 🛠️ Tech Stack
-
-| Layer                | Technology                                |
-|----------------------|-------------------------------------------|
-| **Runtime**          | Node.js 20 (npm)                          |
-| **Backend**          | Express, TypeScript, Zod, Mongoose        |
-| **Database**         | MongoDB Atlas                             |
-| **Cache & Jobs**     | Redis, BullMQ                             |
-| **Real-Time**        | WebSockets (ws)                           |
-| **Authentication**   | bcrypt, JWT, helmet, rate-limiter-flexible|
-| **Payments**         | UPI deep-links, Razorpay Orders API       |
-| **Frontend**         | React, Vite, Tailwind CSS, React Query    |
-| **State & Forms**    | Zustand, react-hook-form, Zod             |
-| **Charts**           | Recharts                                  |
-| **Testing**          | Jest, Supertest, React Testing Library    |
-| **CI/CD & Deploy**   | GitHub Actions, Render (API), Netlify (UI)|
-
----
-
-1. **Clone the repository**:
-
-   ```bash
-   git clone https://github.com/ramblingbugbear2/smart-expense.git
+Installation
+   # Clone the repo
+   git clone https://github.com/yourusername/smart-expense.git
    cd smart-expense
+   
+   # Install backend dependencies
+   cd api
+   npm install
+   
+   # Install frontend dependencies  
+   cd ../client
+   npm install
+
+Environment Setup
+   Create .env file in the api directory:
+      # Database
+      MONGODB_URI=mongodb://localhost:27017/smart-expense
+      # JWT Secrets (use strong random strings in production)
+      JWT_ACCESS_SECRET=your-access-secret-here
+      JWT_REFRESH_SECRET=your-refresh-secret-here
+      # Redis (optional for local dev)
+      REDIS_URL=redis://localhost:6379
+      # Server
+      PORT=5000
+      NODE_ENV=development
+      
+Running Locally
+   # Start backend (from api directory)
+   npm run dev
+   
+   # Start frontend (from client directory)  
+   npm run dev
+
+The app will be available at http://localhost:5000
+
+💡 How the Settlement Algorithm Works
+   This was the most interesting part to build. Instead of everyone paying everyone else (which can be a lot of transactions), the app calculates the minimum number of payments needed.
+   For example:
+      ->Alice paid ₹300, should pay ₹100 → she's owed ₹200
+      ->Bob should pay ₹150 but paid ₹0 → he owes ₹150
+      ->Carol should pay ₹150 but paid ₹50 → she owes ₹100
+      ->Instead of 3 separate transactions, Bob pays Alice ₹150 and Carol pays Alice ₹50. Done in 2 transactions instead of 3.
+
+🏗 Architecture Highlights
+      -Layered Backend: Controllers → Services → Models pattern for clean separation
+      -Caching Strategy: Redis caches balance calculations (200ms → 5ms improvement)
+      -Real-time Sync: Socket.io rooms for group-based updates
+      -Indian UPI: QR code generation for seamless payments
+
+🧪 Running Tests
+   # Backend tests
+   cd api
+   npm test
+   
+   # The tests use an in-memory MongoDB so no setup needed
+
+🎯 Future Ideas
+       -Proper UPI Integration
+       -Multi-currency support
+       -Export to PDF/Excel
+       -Bank integration for automatic expense detection
+       -Advanced analytics and spending insights
+       
+🚀 Deployment
+   The app is deployed with:
+      ->Backend & Frontend: Railway
+      ->Database: MongoDB Atlas
+      ->Cache: Railway Redis
+
+📝 Notes
+      -Built this while learning full-stack development
+      -The settlement algorithm was inspired by the "minimum cash flow" problem
+      -Redis caching made a huge difference in performance for complex group calculations
+      -Socket.io was tricky to get right with authentication, but the real-time experience is worth it
+
+🤝 Contributing
+   Feel free to open issues or submit PRs if you find bugs or have suggestions!
